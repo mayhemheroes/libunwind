@@ -1,0 +1,8 @@
+project: libunwind
+target: fuzz_libunwind
+testsuite:
+  - file:///mayhem/mayhem/testsuite/fuzz_libunwind
+cmds:
+  - cmd: /mayhem/fuzz_libunwind
+    libfuzzer: true
+    dictionary: /mayhem/mayhem/fuzz_libunwind.dict

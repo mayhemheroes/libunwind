@@ -1,0 +1,26 @@
+# Dictionary for fuzz_libunwind.
+# The harness is byte-driven, not a file format: data[0]%4 selects one of four
+# mutually-recursive functions; inside each, data[0]==0x01 triggers a libunwind
+# API call (get_proc_name / get_random_reg / check_is_signal / get_save_loc) and
+# data[1] supplies a register number. Tokens below bias the fuzzer toward the
+# decider values (0..3) and the 0x01 "fire the API" branch, plus a few register
+# numbers so reg/save-loc lookups exercise real DWARF register indices.
+
+# decider/trigger byte pairs (decider, pad) that select each recurse function
+recurse1="\x00\x00"
+recurse2="\x01\x00"
+recurse3="\x02\x00"
+recurse4="\x03\x00"
+
+# "fire the API call" marker + a register number argument
+fire_reg0="\x01\x00"
+fire_reg1="\x01\x01"
+fire_reg6="\x01\x06"
+fire_reg7="\x01\x07"
+fire_reg16="\x01\x10"
+
+# longer chains that keep recursing while firing API calls each level
+chain_proc_name="\x00\x00\x01\x00\x01\x00\x01\x00"
+chain_reg="\x01\x00\x01\x06\x01\x07\x01\x10"
+chain_signal="\x02\x00\x01\x00\x01\x00\x01\x00"
+chain_saveloc="\x03\x00\x01\x06\x01\x07\x01\x10"
